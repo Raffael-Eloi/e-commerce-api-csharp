@@ -1,8 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "oa2sIeRyK+n1Tckj2Ec853DYXpdXzocGXT1QIdX3ctCW4y7wo1OpTSYklHCnuw3/nIAoIiOV+xeqMGj9frcYHQ==",
+  "dgSpecHash": "dBOQYfr7YnIetLIv9rGBZaQ1lSjbI0giBATBZ93oRGra2u5umkxOl7s1aNTAM14TUWLOzF67p8o4KSc4xQhlJg==",
   "success": true,
   "projectFilePath": "C:\\Users\\raffa\\Documents\\Siteware\\e-commerce\\src\\Api\\Api.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\raffa\\.nuget\\packages\\mysqlconnector\\2.1.13\\mysqlconnector.2.1.13.nupkg.sha512",
+    "C:\\Users\\raffa\\.nuget\\packages\\system.diagnostics.diagnosticsource\\5.0.1\\system.diagnostics.diagnosticsource.5.0.1.nupkg.sha512"
+  ],
   "logs": []
 }

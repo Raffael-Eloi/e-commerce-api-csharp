@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Api.Model;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace Api.Controllers
 {
@@ -6,7 +9,9 @@ namespace Api.Controllers
 	[ApiController]
 	public class ProdutosController : ControllerBase
 	{
-		[HttpPut("{idDoProduto}/Promocao/{idDaPromocao}")]
+        private static readonly string nomeArquivoCSV = "Repositorio\\produtos.csv";
+
+        [HttpPut("{idDoProduto}/Promocao/{idDaPromocao}")]
 		public void VincularPromocaoAoProduto(int idDaPromocao, int idDoProduto)
 		{
 		}
@@ -26,7 +31,18 @@ namespace Api.Controllers
 		[HttpPost("novo")]
 		public string NovoProduto()
 		{
-			return "Aqui vai criar um novo Produto";
+			Console.WriteLine(HttpContext.Request.Form["nome"].ToString());
+			//var nome = HttpContext.Request.Form["nome"].ToString();
+			//var preco = HttpContext.Request.Form["preco"].ToString();
+
+			//file.WriteLine($"${Produto.Id};{Produto.Nome};{Produto.Preco}");
+			//return $"{nome} - {preco}";
+
+			Produto produto = new Produto(Produto.getLastId(), "Produto teste", 525);
+			Produto.insereNovoProduto(produto);
+
+			Response.StatusCode = 201;
+			return $"{produto.Nome} foi cadastrado com sucesso";
 		}
 
 		[HttpPut("editar/{id:int}")]
