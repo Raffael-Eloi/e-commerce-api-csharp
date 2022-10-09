@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Api.Model;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
 namespace Api.Controllers
@@ -29,18 +30,5 @@ namespace Api.Controllers
 		{
 			return 0;
 		}
-	}
-
-	public class Item
-	{
-		public int IdDoProduto { get; set; }
-		public int Quantidade { get; set; }
-	}
-
-	public class Produto
-	{
-		public int Id { get; set; }
-		public string Nome { get; set; }
-		public decimal Preco { get; set; }
 	}
 }
