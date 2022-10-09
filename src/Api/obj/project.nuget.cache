@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "qyNy2ugQYW3NxM+nR/3z8VTEkpBUb/4UXsMmuyF88ObYu7jJUyU4Zcckdh7rNuipF4iGKBcE8BhepltDoX6IsQ==",
+  "dgSpecHash": "oa2sIeRyK+n1Tckj2Ec853DYXpdXzocGXT1QIdX3ctCW4y7wo1OpTSYklHCnuw3/nIAoIiOV+xeqMGj9frcYHQ==",
   "success": true,
-  "projectFilePath": "D:\\Siteware\\Processo\\ProcessoSeletivo\\src\\Api\\Api.csproj",
+  "projectFilePath": "C:\\Users\\raffa\\Documents\\Siteware\\e-commerce\\src\\Api\\Api.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

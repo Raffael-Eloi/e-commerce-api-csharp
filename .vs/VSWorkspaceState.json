@@ -1,0 +1,11 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\Api",
+    "\\test",
+    "\\test\\Api.Tests"
+  ],
+  "SelectedNode": "\\src\\Api\\Program.cs",
+  "PreviewInSolutionExplorer": false
+}
