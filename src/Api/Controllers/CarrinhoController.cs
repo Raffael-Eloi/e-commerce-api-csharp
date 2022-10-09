@@ -15,14 +15,29 @@ namespace Api.Controllers
 			new Produto { Id = 3, Nome = "Sanfona do Buxin", Preco = 10 }
 		};
 
-		[HttpPost("Item")]
-		public void AdicionarItem(Item item)
+		[HttpGet("todos")]
+		public string TodosOsItens()
 		{
+			return "Aqui vai retornar todos os itens do carrinho";
 		}
 
-		[HttpPost("LimparCarrinho")]
-		public void LimparCarrinho()
+		[HttpPost("novo")]
+        //public string AdicionarItem(Item item)
+        public string AdicionarItem()
 		{
+			return "Aqui vai cadastrar um novo item no carrinho";
+		}
+
+		[HttpDelete("excluir/{id:int}")]
+		public string ExcluirItemDoCarrinho(int id)
+		{
+			return $"Aqui vai excluir o carrinho com o produto do id {id}";
+		}
+
+		[HttpPost("limpar-carrinho")]
+		public string LimparCarrinho()
+		{
+			return "Aqui vai limpar o carrinho";
 		}
 
 		[HttpGet("Total")]
