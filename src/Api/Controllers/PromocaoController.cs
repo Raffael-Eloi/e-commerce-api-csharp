@@ -13,7 +13,6 @@ namespace Api.Controllers
     [ApiController]
     public class PromocaoController : ControllerBase
     {
-
         private PromocaoContext _promocaoContext;
 
         public PromocaoController(PromocaoContext context)
@@ -83,6 +82,5 @@ namespace Api.Controllers
 
             return NoContent();
         }
-
     }
 }
