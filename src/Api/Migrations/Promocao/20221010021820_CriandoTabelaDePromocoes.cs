@@ -1,31 +1,31 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 using MySql.EntityFrameworkCore.Metadata;
 
-namespace Api.Migrations
+namespace Api.Migrations.Promocao
 {
-    public partial class CriandoTabelaDeProduto : Migration
+    public partial class CriandoTabelaDePromocoes : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Produtos",
+                name: "Promocoes",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    Nome = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
-                    Preco = table.Column<decimal>(type: "decimal(18, 2)", nullable: false)
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Código = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Produtos", x => x.Id);
+                    table.PrimaryKey("PK_Promocoes", x => x.Id);
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Produtos");
+                name: "Promocoes");
         }
     }
 }
