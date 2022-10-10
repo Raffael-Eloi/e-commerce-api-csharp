@@ -1,4 +1,3 @@
-using Api.Repositorio;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
@@ -8,7 +7,6 @@ namespace Api
 	{
 		public static void Main(string[] args)
 		{
-			ProdutoRepositorioFake inicializaCSV = new ProdutoRepositorioFake();
             CreateHostBuilder(args).Build().Run();
 		}
 

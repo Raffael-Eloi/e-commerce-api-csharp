@@ -10,9 +10,9 @@ namespace Api.Controllers
 	{
 		private static readonly List<Produto> _produtos = new List<Produto>
 		{
-			new Produto ( 1, "PS5", 50 ),
-			new Produto ( 2, "TV do Edi 32 polegadas (Modelo 2002)", 30 ),
-			new Produto ( 3, "Sanfona do Buxin", 10 )
+			//new Produto ( 1, "PS5", 50 ),
+			//new Produto ( 2, "TV do Edi 32 polegadas (Modelo 2002)", 30 ),
+			//new Produto ( 3, "Sanfona do Buxin", 10 )
 		};
 
 		[HttpGet("todos")]

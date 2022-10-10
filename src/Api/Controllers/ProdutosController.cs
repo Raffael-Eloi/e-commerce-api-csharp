@@ -1,7 +1,9 @@
-﻿using Api.Model;
-using Microsoft.AspNetCore.Http;
+﻿using Api.Data;
+using Api.Data.Dtos;
+using Api.Model;
 using Microsoft.AspNetCore.Mvc;
-using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Api.Controllers
 {
@@ -9,52 +11,79 @@ namespace Api.Controllers
 	[ApiController]
 	public class ProdutosController : ControllerBase
 	{
-        private static readonly string nomeArquivoCSV = "Repositorio\\produtos.csv";
+		private ProdutoContext _produtoContext;
+
+		public ProdutosController(ProdutoContext context)
+		{
+			_produtoContext = context;
+        }
 
         [HttpPut("{idDoProduto}/Promocao/{idDaPromocao}")]
 		public void VincularPromocaoAoProduto(int idDaPromocao, int idDoProduto)
 		{
 		}
 
-		[HttpGet("todos")]
-		public string TodosOsProdutos()
+		[HttpGet]
+		public IEnumerable<Produto> TodosOsProdutos()
 		{
-			return "Aqui vai ser o get all";
+			return _produtoContext.Produtos;
 		}
 
-		[HttpGet("detalhes/{id:int}")]
-		public string Detalhes(int id)
+		[HttpGet("{id:int}")]
+		public IActionResult Detalhes(int id)
 		{
-			return $"Aqui vai ser o get do produto do id {id}";
+			Produto produto = _produtoContext.Produtos.FirstOrDefault(produto => produto.Id == id);
+			if (produto != null)
+			{
+				return Ok(produto);
+			}
+
+			return NotFound();
 		}
 
-		[HttpPost("novo")]
-		public string NovoProduto()
+		[HttpPost]
+		public IActionResult NovoProduto([FromBody] CreateProdutoDto produtoDto)
 		{
-			Console.WriteLine(HttpContext.Request.Form["nome"].ToString());
-			//var nome = HttpContext.Request.Form["nome"].ToString();
-			//var preco = HttpContext.Request.Form["preco"].ToString();
+			Produto produto = new Produto
+			{
+				Nome = produtoDto.Nome,
+				Preco = produtoDto.Preco
+			};
+			_produtoContext.Produtos.Add(produto);
+			_produtoContext.SaveChanges();
 
-			//file.WriteLine($"${Produto.Id};{Produto.Nome};{Produto.Preco}");
-			//return $"{nome} - {preco}";
-
-			Produto produto = new Produto(Produto.getLastId(), "Produto teste", 525);
-			Produto.insereNovoProduto(produto);
-
-			Response.StatusCode = 201;
-			return $"{produto.Nome} foi cadastrado com sucesso";
+			return CreatedAtAction(nameof(Detalhes), new { Id = produto.Id }, produto);
 		}
 
-		[HttpPut("editar/{id:int}")]
-		public string EditarProduto(int id)
+		[HttpPut("{id:int}")]
+		public IActionResult EditarProduto(int id, [FromBody] UpdateProduto produtoDto)
 		{
-			return $"Aqui vai ser o editar do produto do id {id}";
+			Produto produto = _produtoContext.Produtos.FirstOrDefault(produto => produto.Id == id);
+			
+			if (produto == null)
+			{
+				return NotFound();
+			}
+
+            produto.Preco = produtoDto.Preco;
+            produto.Nome = produtoDto.Nome;
+			_produtoContext.SaveChanges();
+
+            return NoContent();
 		}
 
-		[HttpDelete("excluir/{id:int}")]
-		public string ExcluirProduto(int id)
+		[HttpDelete("{id:int}")]
+		public IActionResult ExcluirProduto(int id)
 		{
-			return $"Aqui vai ser o excluir do produto do id {id}";
+			Produto produto = _produtoContext.Produtos.FirstOrDefault(produto => produto.Id == id);
+			if (produto == null)
+			{
+				return NotFound();
+			}
+			_produtoContext.Produtos.Remove(produto);
+			_produtoContext.SaveChanges();
+
+			return NoContent();
 		}
 	}
 }
