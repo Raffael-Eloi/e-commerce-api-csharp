@@ -22,11 +22,11 @@ namespace Api.Migrations.Promocao
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Código")
+                    b.Property<string>("Codigo")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Nome")
                         .IsRequired()
                         .HasColumnType("text");
 

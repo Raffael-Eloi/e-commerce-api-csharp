@@ -1,5 +1,5 @@
 ﻿using Api.Data;
-using Api.Data.Dtos;
+using Api.Data.Dtos.Produto;
 using Api.Model;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;

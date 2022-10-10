@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Api.Migrations.Item
+namespace Api.Migrations.Promocao
 {
-    [DbContext(typeof(ItemContext))]
-    [Migration("20221010021843_CriandoTabelaDeItens")]
-    partial class CriandoTabelaDeItens
+    [DbContext(typeof(PromocaoContext))]
+    [Migration("20221010032016_CriandoTabelaDePromocoes")]
+    partial class CriandoTabelaDePromocoes
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -18,24 +18,23 @@ namespace Api.Migrations.Item
                 .HasAnnotation("Relational:MaxIdentifierLength", 64)
                 .HasAnnotation("ProductVersion", "5.0.5");
 
-            modelBuilder.Entity("Api.Model.Item", b =>
+            modelBuilder.Entity("Api.Models.Promocao", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("IdDaPromocao")
-                        .HasColumnType("int");
+                    b.Property<string>("Codigo")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<int>("IdDoProduto")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantidade")
-                        .HasColumnType("int");
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Items");
+                    b.ToTable("Promocoes");
                 });
 #pragma warning restore 612, 618
         }

@@ -13,8 +13,8 @@ namespace Api.Migrations.Promocao
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Código = table.Column<string>(type: "text", nullable: false)
+                    Nome = table.Column<string>(type: "text", nullable: false),
+                    Codigo = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {

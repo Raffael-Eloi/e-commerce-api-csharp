@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Api.Migrations.CarrinhoDeCompras
+namespace Api.Migrations
 {
-    [DbContext(typeof(CarrinhoDeComprasContext))]
-    [Migration("20221010022001_CriandoTabelaDeCarrinhoDeCompras")]
-    partial class CriandoTabelaDeCarrinhoDeCompras
+    [DbContext(typeof(ProdutoContext))]
+    [Migration("20221010031555_CriandoTabelaDeProdutos")]
+    partial class CriandoTabelaDeProdutos
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -18,18 +18,23 @@ namespace Api.Migrations.CarrinhoDeCompras
                 .HasAnnotation("Relational:MaxIdentifierLength", 64)
                 .HasAnnotation("ProductVersion", "5.0.5");
 
-            modelBuilder.Entity("Api.Models.CarrinhoDeCompras", b =>
+            modelBuilder.Entity("Api.Model.Produto", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("IdDoItem")
-                        .HasColumnType("int");
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<decimal>("Preco")
+                        .HasColumnType("decimal(18, 2)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("CarrinhoDeCompras");
+                    b.ToTable("Produtos");
                 });
 #pragma warning restore 612, 618
         }

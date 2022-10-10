@@ -1,17 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Api.Models
+namespace Api.Data.Dtos.Promocao
 {
-    public class Promocao
+    public class CreatePromocaoDto
     {
-        [Key]
-        [Required]
-        public int Id { get; set; }
-
         [Required(ErrorMessage = "O nome da promoção é obrigatório")]
         public string Nome { get; set; }
 
         [Required(ErrorMessage = "O código da promoção é obrigatório")]
-        public string Codigo{ get; set; }
+        public string Codigo { get; set; }
     }
 }
