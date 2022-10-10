@@ -15,7 +15,8 @@ namespace Api.Migrations.Item
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     IdDoProduto = table.Column<int>(type: "int", nullable: false),
                     IdDaPromocao = table.Column<int>(type: "int", nullable: false),
-                    Quantidade = table.Column<int>(type: "int", nullable: false)
+                    Quantidade = table.Column<int>(type: "int", nullable: false),
+                    valorTotal = table.Column<double>(type: "double", nullable: false)
                 },
                 constraints: table =>
                 {

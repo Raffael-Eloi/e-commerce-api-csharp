@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.Migrations.Item
 {
     [DbContext(typeof(ItemContext))]
-    [Migration("20221010031614_CriandoTabelaDeItens")]
+    [Migration("20221010052445_CriandoTabelaDeItens")]
     partial class CriandoTabelaDeItens
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,6 +32,9 @@ namespace Api.Migrations.Item
 
                     b.Property<int>("Quantidade")
                         .HasColumnType("int");
+
+                    b.Property<double>("valorTotal")
+                        .HasColumnType("double");
 
                     b.HasKey("Id");
 

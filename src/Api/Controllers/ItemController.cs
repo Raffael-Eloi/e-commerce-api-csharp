@@ -1,5 +1,4 @@
-﻿using Api.Data.Dtos.Promocao;
-using Api.Data;
+﻿using Api.Data;
 using Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -16,10 +15,14 @@ namespace Api.Controllers
     {
 
         private ItemContext _itemContext;
+        private ProdutoContext _produtoContext;
+        private PromocaoContext _promocaoContext;
 
-        public ItemController(ItemContext context)
+        public ItemController(ItemContext context, ProdutoContext produtoContext, PromocaoContext promocaoContext)
         {
             _itemContext = context;
+            _produtoContext = produtoContext;
+            _promocaoContext = promocaoContext;
         }
 
         [HttpGet]
@@ -43,12 +46,34 @@ namespace Api.Controllers
         [HttpPost]
         public IActionResult NovoItem([FromBody] CreateItemDto itemDto)
         {
+            Produto produto = _produtoContext.Produtos.FirstOrDefault(produto => produto.Id == itemDto.IdDoProduto);
+            if (produto == null)
+            {
+                return NotFound();
+            }
+
+            Promocao promocao = _promocaoContext.Promocoes.FirstOrDefault(promocao => promocao.Id == itemDto.IdDaPromocao);
+            if (produto == null)
+            {
+                return NotFound();
+            }
+
+            Item itemVerificacao = _itemContext.Items.FirstOrDefault(itemVerificacao => itemVerificacao.IdDoProduto == itemDto.IdDoProduto);
+            if (itemVerificacao != null)
+            {
+                return BadRequest();
+            }
+
             Item item = new Item
             {
                 IdDoProduto = itemDto.IdDoProduto,
                 IdDaPromocao = itemDto.IdDaPromocao,
                 Quantidade = itemDto.Quantidade
             };
+
+            double valorTotal = promocao != null ? Promocao.calculaValorDoItem(item, produto, promocao) : (double) produto.Preco * item.Quantidade;
+            item.valorTotal = valorTotal;
+
             _itemContext.Items.Add(item);
             _itemContext.SaveChanges();
 
@@ -58,6 +83,18 @@ namespace Api.Controllers
         [HttpPut("{id:int}")]
         public IActionResult EditarItem(int id, [FromBody] UpdateItemDto itemDto)
         {
+            Produto produto = _produtoContext.Produtos.FirstOrDefault(produto => produto.Id == itemDto.IdDoProduto);
+            if (produto == null)
+            {
+                return NotFound();
+            }
+
+            Item itemVerificacao = _itemContext.Items.FirstOrDefault(itemVerificacao => itemVerificacao.IdDoProduto == itemDto.IdDoProduto);
+            if (itemVerificacao != null)
+            {
+                return BadRequest();
+            }
+
             Item item = _itemContext.Items.FirstOrDefault(item => item.Id == id);
 
             if (item == null)

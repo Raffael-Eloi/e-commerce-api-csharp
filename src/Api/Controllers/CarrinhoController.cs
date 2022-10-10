@@ -32,7 +32,13 @@ namespace Api.Controllers
 		[HttpPost]
         public IActionResult AdicionarItemNoCarrinho([FromBody] CreateCarrinhoDeComprasDto carrinhoDeComprasDto)
 		{
-			CarrinhoDeCompras carrinho = new CarrinhoDeCompras()
+            Item item = _itemContext.Items.FirstOrDefault(item => item.Id == carrinhoDeComprasDto.IdDoItem);
+			if (item == null)
+			{
+				return NotFound();
+			}
+
+            CarrinhoDeCompras carrinho = new CarrinhoDeCompras()
 			{
 				IdDoItem = carrinhoDeComprasDto.IdDoItem
 			};

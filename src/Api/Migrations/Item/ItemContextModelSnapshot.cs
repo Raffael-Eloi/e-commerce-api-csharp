@@ -31,6 +31,9 @@ namespace Api.Migrations.Item
                     b.Property<int>("Quantidade")
                         .HasColumnType("int");
 
+                    b.Property<double>("valorTotal")
+                        .HasColumnType("double");
+
                     b.HasKey("Id");
 
                     b.ToTable("Items");
