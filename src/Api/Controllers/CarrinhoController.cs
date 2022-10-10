@@ -1,6 +1,10 @@
-﻿using Api.Model;
+﻿using Api.Data;
+using Api.Data.Dtos.CarrinhoDeCompras;
+using Api.Model;
+using Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Api.Controllers
 {
@@ -8,42 +12,88 @@ namespace Api.Controllers
 	[Route("api/[controller]")]
 	public class CarrinhoController : ControllerBase
 	{
-		private static readonly List<Produto> _produtos = new List<Produto>
-		{
-			//new Produto ( 1, "PS5", 50 ),
-			//new Produto ( 2, "TV do Edi 32 polegadas (Modelo 2002)", 30 ),
-			//new Produto ( 3, "Sanfona do Buxin", 10 )
-		};
+		private CarrinhoDeComprasContext _carrinhoContext;
+        private ItemContext _itemContext;
+        private ProdutoContext _produtoContext;
 
-		[HttpGet("todos")]
-		public string TodosOsItens()
+        public CarrinhoController(CarrinhoDeComprasContext carrinhoContext, ItemContext itemContext, ProdutoContext produtoContext)
 		{
-			return "Aqui vai retornar todos os itens do carrinho";
+			_carrinhoContext = carrinhoContext;
+			_itemContext = itemContext;
+			_produtoContext = produtoContext;
+        }
+
+		[HttpGet]
+		public IEnumerable<CarrinhoDeCompras> Todos()
+		{
+			return _carrinhoContext.CarrinhoDeCompras;
 		}
 
-		[HttpPost("novo")]
-        //public string AdicionarItem(Item item)
-        public string AdicionarItem()
+		[HttpPost]
+        public IActionResult AdicionarItemNoCarrinho([FromBody] CreateCarrinhoDeComprasDto carrinhoDeComprasDto)
 		{
-			return "Aqui vai cadastrar um novo item no carrinho";
+			CarrinhoDeCompras carrinho = new CarrinhoDeCompras()
+			{
+				IdDoItem = carrinhoDeComprasDto.IdDoItem
+			};
+
+			_carrinhoContext.CarrinhoDeCompras.Add(carrinho);
+			_carrinhoContext.SaveChanges();
+
+			return CreatedAtAction(nameof(Detalhes), new { Id = carrinho.Id }, carrinho);
 		}
 
-		[HttpDelete("excluir/{id:int}")]
-		public string ExcluirItemDoCarrinho(int id)
+		[HttpGet("{id:int}")]
+		public IActionResult Detalhes(int id)
 		{
-			return $"Aqui vai excluir o carrinho com o produto do id {id}";
+			CarrinhoDeCompras carrinho = _carrinhoContext.CarrinhoDeCompras.FirstOrDefault(carrinho => carrinho.Id == id);
+			if (carrinho != null)
+			{
+				return Ok(carrinho);
+			}
+			return NotFound();
 		}
+
+        [HttpDelete("{id:int}")]
+		public IActionResult ExcluirItemDoCarrinho(int id)
+		{
+            CarrinhoDeCompras carrinho = _carrinhoContext.CarrinhoDeCompras.FirstOrDefault(carrinho => carrinho.Id == id);
+            if (carrinho == null)
+            {
+                return NotFound();
+            }
+            
+            _carrinhoContext.Remove(carrinho);
+            _carrinhoContext.SaveChanges();
+            return NoContent();
+        }
 
 		[HttpPost("limpar-carrinho")]
-		public string LimparCarrinho()
+		public IActionResult LimparCarrinho()
 		{
-			return "Aqui vai limpar o carrinho";
-		}
+			List<CarrinhoDeCompras> listOfCompras = _carrinhoContext.CarrinhoDeCompras.ToList();
+			foreach (var carrinho in listOfCompras)
+			{
+                _carrinhoContext.CarrinhoDeCompras.Remove(carrinho);
+			}
+            _carrinhoContext.SaveChanges();
+            return NoContent();
+        }
 
 		[HttpGet("Total")]
-		public decimal ObterTotalDoCarrinho()
+		public string ObterTotalDoCarrinho()
 		{
-			return 0;
-		}
+			double valorTotal = 0;
+            List<CarrinhoDeCompras> listOfCompras = _carrinhoContext.CarrinhoDeCompras.ToList();
+            foreach (var carrinho in listOfCompras)
+            {
+				Item item = _itemContext.Items.FirstOrDefault(item => item.Id == carrinho.IdDoItem);
+				Produto produto = _produtoContext.Produtos.FirstOrDefault(produto => produto.Id == item.IdDoProduto);
+
+                valorTotal += (double) produto.Preco * item.Quantidade;
+            }
+
+			return $"O valor total do carrinho é {valorTotal}";
+        }
 	}
 }
