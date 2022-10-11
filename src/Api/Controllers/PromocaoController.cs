@@ -1,10 +1,8 @@
 ﻿using Api.Data;
-using Api.Model;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using Api.Models;
 using System.Linq;
-using Api.Data.Dtos.Produto;
 using Api.Data.Dtos.Promocao;
 
 namespace Api.Controllers

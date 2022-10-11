@@ -26,7 +26,7 @@ namespace Api.Controllers
 		[HttpGet("{id:int}")]
 		public IActionResult Detalhes(int id)
 		{
-			if (Produto.ProdutoExiste(_produtoContext, id))
+			if (!Produto.ProdutoExiste(_produtoContext, id))
 			{
                 return NotFound();
             }
@@ -52,7 +52,7 @@ namespace Api.Controllers
 		[HttpPut("{id:int}")]
 		public IActionResult EditarProduto(int id, [FromBody] UpdateProdutoDto produtoDto)
 		{
-            if (Produto.ProdutoExiste(_produtoContext, id))
+            if (!Produto.ProdutoExiste(_produtoContext, id))
 			{
 				return NotFound();
 			}
@@ -68,7 +68,7 @@ namespace Api.Controllers
 		[HttpDelete("{id:int}")]
 		public IActionResult ExcluirProduto(int id)
 		{
-            if (Produto.ProdutoExiste(_produtoContext, id))
+            if (!Produto.ProdutoExiste(_produtoContext, id))
 			{
 				return NotFound();
 			}

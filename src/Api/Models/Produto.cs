@@ -22,7 +22,7 @@ namespace Api.Models
         public static bool ProdutoExiste(ProdutoContext produtoContext, int id)
         {
             Produto produto = produtoContext.Produtos.FirstOrDefault(produto => produto.Id == id);
-            return produto == null;
+            return produto != null;
         }
 
         public static Produto RecuperarProdutoPeloId(ProdutoContext produtoContext, int id)

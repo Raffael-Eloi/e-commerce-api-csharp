@@ -1,6 +1,5 @@
 ﻿using Api.Data;
 using Api.Data.Dtos.CarrinhoDeCompras;
-using Api.Model;
 using Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -32,8 +31,7 @@ namespace Api.Controllers
 		[HttpPost]
         public IActionResult AdicionarItemNoCarrinho([FromBody] CreateCarrinhoDeComprasDto carrinhoDeComprasDto)
 		{
-            Item item = _itemContext.Items.FirstOrDefault(item => item.Id == carrinhoDeComprasDto.IdDoItem);
-			if (item == null)
+			if (!Item.ItemExiste(_itemContext, carrinhoDeComprasDto.IdDoItem))
 			{
 				return NotFound();
 			}
@@ -52,23 +50,23 @@ namespace Api.Controllers
 		[HttpGet("{id:int}")]
 		public IActionResult Detalhes(int id)
 		{
-			CarrinhoDeCompras carrinho = _carrinhoContext.CarrinhoDeCompras.FirstOrDefault(carrinho => carrinho.Id == id);
-			if (carrinho != null)
+			if (!CarrinhoDeCompras.CarrinhoExiste(_carrinhoContext, id))
 			{
-				return Ok(carrinho);
+                return NotFound();
 			}
-			return NotFound();
+            CarrinhoDeCompras carrinho = CarrinhoDeCompras.RecuperarCarrinhoPeloId(_carrinhoContext, id);
+			return Ok(carrinho);
 		}
 
         [HttpDelete("{id:int}")]
 		public IActionResult ExcluirItemDoCarrinho(int id)
 		{
-            CarrinhoDeCompras carrinho = _carrinhoContext.CarrinhoDeCompras.FirstOrDefault(carrinho => carrinho.Id == id);
-            if (carrinho == null)
+            if (!CarrinhoDeCompras.CarrinhoExiste(_carrinhoContext, id))
             {
                 return NotFound();
             }
             
+            CarrinhoDeCompras carrinho = CarrinhoDeCompras.RecuperarCarrinhoPeloId(_carrinhoContext, id);
             _carrinhoContext.Remove(carrinho);
             _carrinhoContext.SaveChanges();
             return NoContent();
@@ -78,7 +76,7 @@ namespace Api.Controllers
 		public IActionResult LimparCarrinho()
 		{
 			List<CarrinhoDeCompras> listOfCompras = _carrinhoContext.CarrinhoDeCompras.ToList();
-			foreach (var carrinho in listOfCompras)
+			foreach (CarrinhoDeCompras carrinho in listOfCompras)
 			{
                 _carrinhoContext.CarrinhoDeCompras.Remove(carrinho);
 			}
@@ -89,16 +87,7 @@ namespace Api.Controllers
 		[HttpGet("Total")]
 		public string ObterTotalDoCarrinho()
 		{
-			double valorTotal = 0;
-            List<CarrinhoDeCompras> listOfCompras = _carrinhoContext.CarrinhoDeCompras.ToList();
-            foreach (var carrinho in listOfCompras)
-            {
-				Item item = _itemContext.Items.FirstOrDefault(item => item.Id == carrinho.IdDoItem);
-				Produto produto = _produtoContext.Produtos.FirstOrDefault(produto => produto.Id == item.IdDoProduto);
-
-                valorTotal += item.valorTotal;
-            }
-
+			double valorTotal = CarrinhoDeCompras.ObterTotalDoCarrinhoDeCompras(_carrinhoContext, _itemContext);
 			return $"O valor total do carrinho é {valorTotal}";
         }
 	}

@@ -2,7 +2,6 @@
 using Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using Api.Model;
 using System.Linq;
 using Api.Data.Dtos.Item;
 

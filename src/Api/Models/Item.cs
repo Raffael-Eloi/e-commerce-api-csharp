@@ -1,6 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Api.Data;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
-namespace Api.Model
+namespace Api.Models
 {
     public class Item
     {
@@ -19,5 +21,16 @@ namespace Api.Model
 
         [Required]
         public double valorTotal { get; set; }
+
+        public static bool ItemExiste(ItemContext itemContext, int id)
+        {
+            Item item = itemContext.Items.FirstOrDefault(item => item.Id == id);
+            return item != null;
+        }
+
+        public static Item RecuperarItemPeloId(ItemContext itemContext, int id)
+        {
+            return itemContext.Items.FirstOrDefault(item => item.Id == id);
+        }
     }
 }
