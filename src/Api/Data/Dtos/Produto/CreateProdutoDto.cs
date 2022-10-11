@@ -9,7 +9,7 @@ namespace Api.Data.Dtos.Produto
         public string Nome { get; set; }
 
         [Required(ErrorMessage = "O campo preço é obrigatório")]
-        [Range(1, 1000000, ErrorMessage = "O campo nome é obrigatório")]
+        [Range(1, 1000000, ErrorMessage = "O preço deve ser maior que 1 e menor que 1000000")]
         public decimal Preco { get; set; }
     }
 }

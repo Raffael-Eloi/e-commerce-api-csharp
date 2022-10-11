@@ -2,7 +2,7 @@
 
 namespace Api.Data.Dtos.Produto
 {
-    public class UpdateProduto
+    public class UpdateProdutoDto
     {
         [Required(ErrorMessage = "O campo nome é obrigatório")]
         [StringLength(50, ErrorMessage = "O nome não pode passar de 50 caracteres")]

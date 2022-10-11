@@ -89,18 +89,21 @@ namespace Api.Controllers
                 return NotFound();
             }
 
-            Item itemVerificacao = _itemContext.Items.FirstOrDefault(itemVerificacao => itemVerificacao.IdDoProduto == itemDto.IdDoProduto);
-            if (itemVerificacao != null)
-            {
-                return BadRequest();
-            }
-
             Item item = _itemContext.Items.FirstOrDefault(item => item.Id == id);
 
             if (item == null)
             {
                 return NotFound();
             }
+
+            Promocao promocao = _promocaoContext.Promocoes.FirstOrDefault(promocao => promocao.Id == itemDto.IdDaPromocao);
+            if (itemDto.IdDaPromocao != 0 && promocao == null)
+            {
+                return NotFound();
+            }
+
+            double valorTotal = promocao != null ? Promocao.calculaValorDoItem(item, produto, promocao) : (double)produto.Preco * item.Quantidade;
+            item.valorTotal = valorTotal;
 
             item.IdDoProduto = itemDto.IdDoProduto;
             item.IdDaPromocao = itemDto.IdDaPromocao;

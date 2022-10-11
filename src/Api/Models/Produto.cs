@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Api.Data;
+using System;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
-namespace Api.Model
+namespace Api.Models
 {
     public class Produto
     {
@@ -16,5 +18,16 @@ namespace Api.Model
         [Required(ErrorMessage = "O campo preço é obrigatório")]
         [Range(1,1000000, ErrorMessage = "O campo nome é obrigatório")]
         public decimal Preco { get; set; }
+
+        public static bool ProdutoExiste(ProdutoContext produtoContext, int id)
+        {
+            Produto produto = produtoContext.Produtos.FirstOrDefault(produto => produto.Id == id);
+            return produto == null;
+        }
+
+        public static Produto RecuperarProdutoPeloId(ProdutoContext produtoContext, int id)
+        {
+            return produtoContext.Produtos.FirstOrDefault(produto => produto.Id == id);
+        }
     }
 }

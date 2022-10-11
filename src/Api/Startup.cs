@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-
+using System;
 
 namespace Api
 {
@@ -27,7 +27,7 @@ namespace Api
             services.AddDbContext<CarrinhoDeComprasContext>(opts => opts.UseMySQL(Configuration.GetConnectionString("VirtualShopping")));
 
             services.AddControllers();
-		}
+        }
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

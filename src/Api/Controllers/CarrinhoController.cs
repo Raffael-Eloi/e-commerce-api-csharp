@@ -96,7 +96,7 @@ namespace Api.Controllers
 				Item item = _itemContext.Items.FirstOrDefault(item => item.Id == carrinho.IdDoItem);
 				Produto produto = _produtoContext.Produtos.FirstOrDefault(produto => produto.Id == item.IdDoProduto);
 
-                valorTotal += (double) produto.Preco * item.Quantidade;
+                valorTotal += item.valorTotal;
             }
 
 			return $"O valor total do carrinho é {valorTotal}";
