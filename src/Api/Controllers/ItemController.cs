@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using Api.Data.Dtos.Item;
+using Api.Factories;
+using Api.Models.Promocoes;
 
 namespace Api.Controllers
 {
@@ -70,9 +72,19 @@ namespace Api.Controllers
                 Quantidade = itemDto.Quantidade
             };
 
-            double valorTotal = promocao != null ? Promocao.calculaValorDoItem(item, produto, promocao) : (double) produto.Preco * item.Quantidade;
-            item.valorTotal = valorTotal;
+            double valorTotal = 0;
+            if (promocao != null)
+            {
+                PromocaoFactory factory = new PromocaoFactory();
+                IPromotion promocaoEscolhida = factory.FactoryMethod(promocao.Codigo);
+                valorTotal = promocaoEscolhida.CalculaValorTotalDaCompra(produto.Preco, itemDto.Quantidade);
+            }
+            else
+            {
+                valorTotal = (double)produto.Preco * item.Quantidade;
+            }
 
+            item.valorTotal = valorTotal;
             _itemContext.Items.Add(item);
             _itemContext.SaveChanges();
 
@@ -101,12 +113,21 @@ namespace Api.Controllers
                 return NotFound();
             }
 
-            double valorTotal = promocao != null ? Promocao.calculaValorDoItem(item, produto, promocao) : (double)produto.Preco * item.Quantidade;
-            item.valorTotal = valorTotal;
+            double valorTotal = 0;
+            if (promocao != null)
+            {
+                PromocaoFactory factory = new PromocaoFactory();
+                IPromotion promocaoEscolhida = factory.FactoryMethod(promocao.Codigo);
+                valorTotal = promocaoEscolhida.CalculaValorTotalDaCompra(produto.Preco, itemDto.Quantidade);
+            } else
+            {
+                valorTotal = (double) produto.Preco * item.Quantidade;
+            }
 
             item.IdDoProduto = itemDto.IdDoProduto;
             item.IdDaPromocao = itemDto.IdDaPromocao;
             item.Quantidade = itemDto.Quantidade;
+            item.valorTotal = valorTotal;
 
             _itemContext.SaveChanges();
 

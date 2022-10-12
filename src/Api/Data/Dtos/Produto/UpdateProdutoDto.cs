@@ -10,6 +10,6 @@ namespace Api.Data.Dtos.Produto
 
         [Required(ErrorMessage = "O campo preço é obrigatório")]
         [Range(1, 1000000, ErrorMessage = "O campo nome é obrigatório")]
-        public decimal Preco { get; set; }
+        public double Preco { get; set; }
     }
 }
