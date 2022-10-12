@@ -6,6 +6,7 @@ using System.Linq;
 using Api.Data.Dtos.Item;
 using Api.Factories;
 using Api.Models.Promocoes;
+using System;
 
 namespace Api.Controllers
 {
@@ -14,7 +15,6 @@ namespace Api.Controllers
 
     public class ItemController : ControllerBase
     {
-
         private ItemContext _itemContext;
         private ProdutoContext _produtoContext;
         private PromocaoContext _promocaoContext;
@@ -36,29 +36,46 @@ namespace Api.Controllers
         public IActionResult Detalhes(int id)
         {
             Item item = _itemContext.Items.FirstOrDefault(item => item.Id == id);
-            if (item != null)
+            if (item == null)
             {
-                return Ok(item);
+                return NotFound();  
             }
 
-            return NotFound();
+            Produto produto = Produto.RecuperarProdutoPeloId(_produtoContext, item.IdDoProduto);
+            Console.WriteLine(Promocao.RecuperarPromocaoPeloId(_promocaoContext, item.IdDaPromocao).Nome);
+            Promocao promocao = item.IdDaPromocao != 0 ? Promocao.RecuperarPromocaoPeloId(_promocaoContext, item.IdDaPromocao) : null;
+
+            ReadItemDto itemVisualizacao = new ReadItemDto()
+            {
+                Id = item.Id,
+                IdDoProduto = item.IdDoProduto,
+                NomeDoProduto = produto.Nome,
+                PrecoDoProduto = produto.Preco,
+                IdDaPromocao = item.IdDaPromocao,
+                NomeDaPromocao = promocao != null ? promocao.Nome : "-",
+                CodigoDaPromocao = promocao != null ? promocao.Codigo : "-",
+                Quantidade = item.Quantidade,
+                valorTotal = item.valorTotal,
+                HoraDaConsulta = DateTime.Now
+            };
+
+            return Ok(itemVisualizacao);
         }
 
         [HttpPost]
         public IActionResult NovoItem([FromBody] CreateItemDto itemDto)
         {
-            Produto produto = _produtoContext.Produtos.FirstOrDefault(produto => produto.Id == itemDto.IdDoProduto);
-            if (produto == null)
+            if (Produto.ProdutoExiste(_produtoContext, itemDto.IdDoProduto))
             {
                 return NotFound();
             }
 
-            Promocao promocao = _promocaoContext.Promocoes.FirstOrDefault(promocao => promocao.Id == itemDto.IdDaPromocao);
-            if (produto == null)
+            if (Promocao.PromocaoExiste(_promocaoContext, itemDto.IdDaPromocao))
             {
                 return NotFound();
             }
 
+            Produto produto = Produto.RecuperarProdutoPeloId(_produtoContext, itemDto.IdDoProduto); 
             Item itemVerificacao = _itemContext.Items.FirstOrDefault(itemVerificacao => itemVerificacao.IdDoProduto == itemDto.IdDoProduto);
             if (itemVerificacao != null)
             {
@@ -73,8 +90,9 @@ namespace Api.Controllers
             };
 
             double valorTotal = 0;
-            if (promocao != null)
+            if (itemDto.IdDaPromocao != 0)
             {
+                Promocao promocao = Promocao.RecuperarPromocaoPeloId(_promocaoContext, itemDto.IdDaPromocao);
                 PromocaoFactory factory = new PromocaoFactory();
                 IPromotion promocaoEscolhida = factory.FactoryMethod(promocao.Codigo);
                 valorTotal = promocaoEscolhida.CalculaValorTotalDaCompra(produto.Preco, itemDto.Quantidade);

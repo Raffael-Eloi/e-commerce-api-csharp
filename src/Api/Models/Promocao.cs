@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Api.Data;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace Api.Models
 {
@@ -31,6 +33,17 @@ namespace Api.Models
             }
 
             return (double) produto.Preco * item.Quantidade;
+        }
+
+        public static bool PromocaoExiste(PromocaoContext promocaoContext, int id)
+        {
+            Promocao promocao = promocaoContext.Promocoes.FirstOrDefault(promocao => promocao.Id == id);
+            return promocao != null;
+        }
+
+        public static Promocao RecuperarPromocaoPeloId(PromocaoContext promocaoContext, int id)
+        {
+            return promocaoContext.Promocoes.FirstOrDefault(promocao => promocao.Id == id);
         }
     }
 }

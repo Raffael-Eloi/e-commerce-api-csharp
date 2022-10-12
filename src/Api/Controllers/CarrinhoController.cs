@@ -2,6 +2,7 @@
 using Api.Data.Dtos.CarrinhoDeCompras;
 using Api.Models;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,12 +15,14 @@ namespace Api.Controllers
 		private CarrinhoDeComprasContext _carrinhoContext;
         private ItemContext _itemContext;
         private ProdutoContext _produtoContext;
+		private PromocaoContext _promocaoContext;
 
-        public CarrinhoController(CarrinhoDeComprasContext carrinhoContext, ItemContext itemContext, ProdutoContext produtoContext)
+        public CarrinhoController(CarrinhoDeComprasContext carrinhoContext, ItemContext itemContext, ProdutoContext produtoContext, PromocaoContext promocaoContext)
 		{
 			_carrinhoContext = carrinhoContext;
 			_itemContext = itemContext;
 			_produtoContext = produtoContext;
+			_promocaoContext = promocaoContext;
         }
 
 		[HttpGet]
@@ -54,8 +57,26 @@ namespace Api.Controllers
 			{
                 return NotFound();
 			}
-            CarrinhoDeCompras carrinho = CarrinhoDeCompras.RecuperarCarrinhoPeloId(_carrinhoContext, id);
-			return Ok(carrinho);
+            
+			CarrinhoDeCompras carrinho = CarrinhoDeCompras.RecuperarCarrinhoPeloId(_carrinhoContext, id);
+			Item item = Item.RecuperarItemPeloId(_itemContext, carrinho.IdDoItem);
+			Produto produto = Produto.RecuperarProdutoPeloId(_produtoContext, item.IdDoProduto);
+            Promocao promocao = item.IdDaPromocao != 0 ? Promocao.RecuperarPromocaoPeloId(_promocaoContext, item.IdDaPromocao) : null;
+
+            ReadCarrinhoDeComprasDto carrinhoVisualizacao = new ReadCarrinhoDeComprasDto()
+			{
+				Id = carrinho.Id,
+				IdDoItem = item.Id,
+				NomeDoProduto = produto.Nome,
+				PrecoDoProduto = produto.Preco,
+				NomeDaPromocao = promocao != null ? promocao.Nome : "-",
+				CodigoDaPromocao = promocao != null ? promocao.Codigo : "-",
+				Quantidade = item.Quantidade,
+				ValorTotal = item.valorTotal,
+				HoraDaConsulta = DateTime.Now
+			};
+
+			return Ok(carrinhoVisualizacao);
 		}
 
         [HttpDelete("{id:int}")]

@@ -2,6 +2,7 @@
 using Api.Data.Dtos.Produto;
 using Api.Models;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 
 namespace Api.Controllers
@@ -30,8 +31,17 @@ namespace Api.Controllers
 			{
                 return NotFound();
             }
+
             Produto produto = Produto.RecuperarProdutoPeloId(_produtoContext, id);
-            return Ok(produto);
+			ReadProdutoDto produtoVisualizacao = new ReadProdutoDto()
+			{
+				Id = produto.Id,
+				Nome = produto.Nome,
+				Preco = produto.Preco,
+				HoraDaConsulta = DateTime.Now
+			};
+
+            return Ok(produtoVisualizacao);
 		}
 
         [HttpPost]

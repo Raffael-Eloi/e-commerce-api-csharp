@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Api.Models;
 using System.Linq;
 using Api.Data.Dtos.Promocao;
+using System;
 
 namespace Api.Controllers
 {
@@ -28,12 +29,20 @@ namespace Api.Controllers
         public IActionResult Detalhes(int id)
         {
             Promocao promocao = _promocaoContext.Promocoes.FirstOrDefault(promocao => promocao.Id == id);
-            if (promocao != null)
+            if (promocao == null)
             {
-                return Ok(promocao);
+                return NotFound();
             }
 
-            return NotFound();
+            ReadPromocaoDto promocaoVisualizacao = new ReadPromocaoDto()
+            {
+                Id = promocao.Id,
+                Nome = promocao.Nome,
+                Codigo = promocao.Codigo,
+                HoraDaConsulta = DateTime.Now
+            };
+
+            return Ok(promocaoVisualizacao);
         }
 
         [HttpPost]
