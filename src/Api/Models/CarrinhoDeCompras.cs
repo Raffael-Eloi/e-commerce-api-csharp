@@ -28,8 +28,8 @@ namespace Api.Models
         public static double ObterTotalDoCarrinhoDeCompras(CarrinhoDeComprasContext carrinhoContext, ItemContext itemContext)
         {
             double valorTotal = 0;
-            List<CarrinhoDeCompras> listOfCompras = carrinhoContext.CarrinhoDeCompras.ToList();
-            foreach (CarrinhoDeCompras carrinho in listOfCompras)
+            List<CarrinhoDeCompras> listaDeCompras = carrinhoContext.CarrinhoDeCompras.ToList();
+            foreach (CarrinhoDeCompras carrinho in listaDeCompras)
             {
                 if (!Item.ItemExiste(itemContext, carrinho.IdDoItem))
                 {

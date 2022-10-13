@@ -35,12 +35,12 @@ namespace Api.Controllers
         [HttpGet("{id:int}")]
         public IActionResult Detalhes(int id)
         {
-            Item item = _itemContext.Items.FirstOrDefault(item => item.Id == id);
-            if (item == null)
+            if (!Item.ItemExiste(_itemContext, id))
             {
                 return NotFound();  
             }
 
+            Item item = Item.RecuperarItemPeloId(_itemContext, id);
             Produto produto = Produto.RecuperarProdutoPeloId(_produtoContext, item.IdDoProduto);
             Console.WriteLine(Promocao.RecuperarPromocaoPeloId(_promocaoContext, item.IdDaPromocao).Nome);
             Promocao promocao = item.IdDaPromocao != 0 ? Promocao.RecuperarPromocaoPeloId(_promocaoContext, item.IdDaPromocao) : null;
@@ -112,26 +112,20 @@ namespace Api.Controllers
         [HttpPut("{id:int}")]
         public IActionResult EditarItem(int id, [FromBody] UpdateItemDto itemDto)
         {
-            Produto produto = _produtoContext.Produtos.FirstOrDefault(produto => produto.Id == itemDto.IdDoProduto);
-            if (produto == null)
+            Item itemAtual = Item.RecuperarItemPeloId(_itemContext, id);
+            if (!Produto.ProdutoExiste(_produtoContext, itemDto.IdDoProduto))
             {
                 return NotFound();
             }
 
-            Item item = _itemContext.Items.FirstOrDefault(item => item.Id == id);
-
-            if (item == null)
-            {
-                return NotFound();
-            }
-
-            Promocao promocao = _promocaoContext.Promocoes.FirstOrDefault(promocao => promocao.Id == itemDto.IdDaPromocao);
-            if (itemDto.IdDaPromocao != 0 && promocao == null)
+            Produto produto = Produto.RecuperarProdutoPeloId(_produtoContext, itemDto.IdDoProduto);
+            if (itemDto.IdDaPromocao != 0 && !Promocao.PromocaoExiste(_promocaoContext, itemDto.IdDaPromocao))
             {
                 return NotFound();
             }
 
             double valorTotal = 0;
+            Promocao promocao = itemDto.IdDaPromocao != 0 ? Promocao.RecuperarPromocaoPeloId(_promocaoContext, itemDto.IdDaPromocao) : itemAtual.IdDaPromocao != 0 ? Promocao.RecuperarPromocaoPeloId(_promocaoContext, itemAtual.IdDaPromocao) : null;
             if (promocao != null)
             {
                 PromocaoFactory factory = new PromocaoFactory();
@@ -139,13 +133,13 @@ namespace Api.Controllers
                 valorTotal = promocaoEscolhida.CalculaValorTotalDaCompra(produto.Preco, itemDto.Quantidade);
             } else
             {
-                valorTotal = (double) produto.Preco * item.Quantidade;
+                valorTotal = (double) produto.Preco * itemDto.Quantidade;
             }
 
-            item.IdDoProduto = itemDto.IdDoProduto;
-            item.IdDaPromocao = itemDto.IdDaPromocao;
-            item.Quantidade = itemDto.Quantidade;
-            item.valorTotal = valorTotal;
+            itemAtual.IdDoProduto = itemDto.IdDoProduto;
+            itemAtual.IdDaPromocao = itemDto.IdDaPromocao;
+            itemAtual.Quantidade = itemDto.Quantidade;
+            itemAtual.valorTotal = valorTotal;
 
             _itemContext.SaveChanges();
 
