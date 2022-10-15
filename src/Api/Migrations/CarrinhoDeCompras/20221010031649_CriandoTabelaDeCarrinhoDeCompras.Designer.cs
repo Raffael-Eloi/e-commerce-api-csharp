@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Api.Migrations.CarrinhoDeCompras
 {
-    [DbContext(typeof(CarrinhoDeComprasContext))]
+    [DbContext(typeof(ShoppingCartContext))]
     [Migration("20221010031649_CriandoTabelaDeCarrinhoDeCompras")]
     partial class CriandoTabelaDeCarrinhoDeCompras
     {

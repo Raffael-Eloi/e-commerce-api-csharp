@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Api.Migrations.CarrinhoDeCompras
 {
-    [DbContext(typeof(CarrinhoDeComprasContext))]
+    [DbContext(typeof(ShoppingCartContext))]
     partial class CarrinhoDeComprasContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

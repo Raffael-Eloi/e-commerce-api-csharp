@@ -104,7 +104,7 @@ namespace Api.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public IActionResult EditarItem(int id, [FromBody] UpdateItemDto itemDto)
+        public IActionResult Update(int id, [FromBody] UpdateItemDto itemDto)
         {
             Item currentItem = Item.GetItemById(id);
             if (!Product.ProductExist(itemDto.ProductId))
