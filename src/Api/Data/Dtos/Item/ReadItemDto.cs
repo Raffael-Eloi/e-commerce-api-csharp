@@ -5,22 +5,22 @@ namespace Api.Data.Dtos.Item
     {
         public int Id { get; set; }
 
-        public int IdDoProduto { get; set; }
+        public int ProductId { get; set; }
 
-        public string NomeDoProduto { get; set; }
+        public string ProductName { get; set; }
 
-        public double PrecoDoProduto { get; set; }
+        public double ProductPrice { get; set; }
 
-        public int IdDaPromocao { get; set; }
+        public int PromotionId { get; set; }
 
-        public string NomeDaPromocao { get; set; }
+        public string PromotionName { get; set; }
 
-        public string CodigoDaPromocao { get; set; }
+        public string PromotionCode { get; set; }
 
-        public int Quantidade { get; set; }
+        public int Quantity { get; set; }
 
-        public double valorTotal { get; set; }
+        public double Total { get; set; }
 
-        public DateTime HoraDaConsulta { get; set; }
+        public DateTime QueryDate { get; set; }
     }
 }

@@ -10,6 +10,6 @@ namespace Api.Data
 
         }
 
-        public DbSet<Item> Items { get; set; }
+        public DbSet<Item> ListOfItems { get; set; }
     }
 }

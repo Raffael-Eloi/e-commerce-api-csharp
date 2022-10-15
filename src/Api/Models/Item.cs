@@ -6,31 +6,39 @@ namespace Api.Models
 {
     public class Item
     {
+        private static readonly ItemContext _itemContext;
+
         [Key]
         [Required]
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "É obrigatório selecionar o menos 1 produto")]
-        public int IdDoProduto { get; set; }
+        [Required(ErrorMessage = "You must to select at least one product")]
+        public int ProductId { get; set; }
 
-        public int IdDaPromocao { get; set; }
+        public int PromotionId { get; set; }
 
-        [Required(ErrorMessage = "É obrigatório definir a quantidade")]
-        [Range(1, 100, ErrorMessage = "A quantidade dever ser no mínimo 1 e no máximo 100")]
-        public int Quantidade { get; set; }
+        [Required(ErrorMessage = "The field is required")]
+        [Range(1, 100, ErrorMessage = "he field price must to be between 1 and 100")]
+        public int Quantity { get; set; }
 
         [Required]
-        public double valorTotal { get; set; }
+        public double Total { get; set; }
 
-        public static bool ItemExiste(ItemContext itemContext, int id)
+        public static bool ItemExist(int id)
         {
-            Item item = itemContext.Items.FirstOrDefault(item => item.Id == id);
+            Item item = _itemContext.ListOfItems.FirstOrDefault(item => item.Id == id);
             return item != null;
         }
 
-        public static Item RecuperarItemPeloId(ItemContext itemContext, int id)
+        public static Item GetItemById(int id)
         {
-            return itemContext.Items.FirstOrDefault(item => item.Id == id);
+            return _itemContext.ListOfItems.FirstOrDefault(item => item.Id == id);
+        }
+
+        public static bool ItemExistByProductId(int productId)
+        {
+            Item item = _itemContext.ListOfItems.FirstOrDefault(item => item.ProductId == productId);
+            return item != null;
         }
     }
 }
