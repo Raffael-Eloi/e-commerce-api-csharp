@@ -12,17 +12,10 @@ namespace Api.Controllers
 	[Route("api/[controller]")]
 	public class ShoppingCartController : ControllerBase
 	{
-		private readonly ShoppingCartContext _shoppingContext;
-
-        public ShoppingCartController(ShoppingCartContext context)
-		{
-            _shoppingContext = context;
-        }
-
 		[HttpGet]
-		public IEnumerable<ShoppingCart> Index()
+		public Microsoft.EntityFrameworkCore.DbSet<ShoppingCart> Index()
 		{
-			return _shoppingContext.ListOfShoppingCarts;
+			return ShoppingCart.GetListOfShoppingCart();
 		}
 
 		[HttpPost]
@@ -38,9 +31,7 @@ namespace Api.Controllers
 				ItemId = shoppingCartDto.ItemId
 			};
 
-            _shoppingContext.ListOfShoppingCarts.Add(cart);
-            _shoppingContext.SaveChanges();
-
+			ShoppingCart.AddNewShoppingCart(cart);
 			return CreatedAtAction(nameof(Show), new { Id = cart.Id }, cart);
 		}
 
@@ -82,20 +73,20 @@ namespace Api.Controllers
             }
             
             ShoppingCart cart = ShoppingCart.GetShoppingCartById(id);
-            _shoppingContext.Remove(cart);
-            _shoppingContext.SaveChanges();
+			ShoppingCart.RemoveShoppingCart(cart);
+
             return NoContent();
         }
 
 		[HttpPost("delete/all")]
 		public IActionResult CleanShoppingList()
 		{
-			List<ShoppingCart> shoppingList = _shoppingContext.ListOfShoppingCarts.ToList();
+			List<ShoppingCart> shoppingList = ShoppingCart.GetListOfShoppingCart().ToList();
 			foreach (ShoppingCart cart in shoppingList)
 			{
-                _shoppingContext.ListOfShoppingCarts.Remove(cart);
+				ShoppingCart.RemoveShoppingCart(cart);
 			}
-            _shoppingContext.SaveChanges();
+			ShoppingCart.SaveChanges();
             return NoContent();
         }
 

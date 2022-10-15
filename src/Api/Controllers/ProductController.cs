@@ -1,9 +1,7 @@
-﻿using Api.Data;
-using Api.Models;
+﻿using Api.Models;
 using Api.Data.Dtos.Product;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 
 namespace Api.Controllers
 {
@@ -11,17 +9,10 @@ namespace Api.Controllers
 	[ApiController]
 	public class ProductController : ControllerBase
 	{
-		private readonly ProductContext _productContext;
-
-		public ProductController(ProductContext context)
-		{
-			_productContext = context;
-        }
-
 		[HttpGet]
-		public IEnumerable<Product> Index()
+		public Microsoft.EntityFrameworkCore.DbSet<Product> Index()
 		{
-			return _productContext.ListOfProducts;
+			return Product.GetListOfProduct();
 		}
 
 		[HttpGet("{id:int}")]
@@ -53,9 +44,7 @@ namespace Api.Controllers
 				Price = productDto.Price
 			};
 
-			_productContext.ListOfProducts.Add(product);
-			_productContext.SaveChanges();
-
+			Product.AddNewProduct(product);
 			return CreatedAtAction(nameof(Show), new { Id = product.Id }, product);
 		}
 
@@ -70,7 +59,7 @@ namespace Api.Controllers
             Product product = Product.GetProductById(id);
             product.Name  = productDto.Name;
             product.Price = productDto.Price;
-            _productContext.SaveChanges();
+			Product.SaveChanges();
 
             return NoContent();
 		}
@@ -83,9 +72,8 @@ namespace Api.Controllers
 				return NotFound();
 			}
 
-            Product product = Product.GetProductById(id);	
-			_productContext.ListOfProducts.Remove(product);
-			_productContext.SaveChanges();
+            Product product = Product.GetProductById(id);
+			Product.RemoveProduct(product);
 
 			return NoContent();
 		}

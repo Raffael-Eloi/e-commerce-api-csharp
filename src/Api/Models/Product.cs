@@ -31,5 +31,27 @@ namespace Api.Models
         {
             return _productContext.ListOfProducts.FirstOrDefault(product => product.Id == id);
         }
+
+        public static Microsoft.EntityFrameworkCore.DbSet<Product> GetListOfProduct()
+        {
+            return _productContext.ListOfProducts;
+        }
+
+        public static void AddNewProduct(Product product)
+        {
+            _productContext.ListOfProducts.Add(product);
+            _productContext.SaveChanges();
+        }
+
+        public static void SaveChanges()
+        {
+            _productContext.SaveChanges();
+        }
+
+        public static void RemoveProduct(Product product)
+        {
+            _productContext.ListOfProducts.Remove(product);
+            _productContext.SaveChanges();
+        }
     }
 }

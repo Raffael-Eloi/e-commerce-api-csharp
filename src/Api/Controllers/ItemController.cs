@@ -1,11 +1,9 @@
-﻿using Api.Data;
-using Api.Models;
+﻿using Api.Models;
 using Api.Factories;
 using Api.Data.Dtos.Item;
 using Api.Models.Promocoes;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 
 namespace Api.Controllers
 {
@@ -14,17 +12,10 @@ namespace Api.Controllers
 
     public class ItemController : ControllerBase
     {
-        private readonly ItemContext _itemContext;
-
-        public ItemController(ItemContext context)
-        {
-            _itemContext = context;
-        }
-
         [HttpGet]
-        public IEnumerable<Item> Index()
+        public Microsoft.EntityFrameworkCore.DbSet<Item> Index()
         {
-            return _itemContext.ListOfItems;
+            return Item.GetListOfItems();
         }
 
         [HttpGet("{id:int}")]
@@ -97,8 +88,7 @@ namespace Api.Controllers
             }
 
             item.Total = totalValue;
-            _itemContext.ListOfItems.Add(item);
-            _itemContext.SaveChanges();
+            Item.AddNewItem(item);
 
             return CreatedAtAction(nameof(Show), new { Id = item.Id }, item);
         }
@@ -135,7 +125,7 @@ namespace Api.Controllers
             currentItem.Quantity = itemDto.Quantity;
             currentItem.Total = totalValue;
 
-            _itemContext.SaveChanges();
+            Item.SaveChanges();
 
             return NoContent();
         }
@@ -149,8 +139,7 @@ namespace Api.Controllers
             }
 
             Item item = Item.GetItemById(id);
-            _itemContext.ListOfItems.Remove(item);
-            _itemContext.SaveChanges();
+            Item.RemoveItem(item);
 
             return NoContent();
         }

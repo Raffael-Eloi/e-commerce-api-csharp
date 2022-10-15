@@ -1,9 +1,7 @@
-﻿using Api.Data;
-using Api.Models;
+﻿using Api.Models;
 using Api.Data.Dtos.Promotion;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 
 namespace Api.Controllers
 {
@@ -11,17 +9,10 @@ namespace Api.Controllers
     [ApiController]
     public class PromotionController : ControllerBase
     {
-        private readonly PromotionContext _promotionContext;
-
-        public PromotionController(PromotionContext context)
-        {
-            _promotionContext = context;
-        }
-
         [HttpGet]
-        public IEnumerable<Promotion> Index()
+        public Microsoft.EntityFrameworkCore.DbSet<Promotion> Index()
         {
-            return _promotionContext.ListOfPromotions;
+            return Promotion.GetListOfPromotions();
         }
 
         [HttpGet("{id:int}")]
@@ -52,9 +43,8 @@ namespace Api.Controllers
                 Name = promotionDto.Name,
                 Code = promotionDto.Code
             };
-            _promotionContext.ListOfPromotions.Add(promotion);
-            _promotionContext.SaveChanges();
 
+            Promotion.AddNewPromotion(promotion);
             return CreatedAtAction(nameof(Show), new { Id = promotion.Id }, promotion);
         }
 
@@ -69,8 +59,8 @@ namespace Api.Controllers
             Promotion promotion = Promotion.GetPromotionById(id);
             promotion.Name = promotionDto.Name;
             promotion.Code = promotionDto.Code;
-            _promotionContext.SaveChanges();
 
+            Promotion.SaveChanges();
             return NoContent();
         }
 
@@ -83,8 +73,7 @@ namespace Api.Controllers
             }
 
             Promotion promotion = Promotion.GetPromotionById(id);
-            _promotionContext.ListOfPromotions.Remove(promotion);
-            _promotionContext.SaveChanges();
+            Promotion.RemovePromotion(promotion);
 
             return NoContent();
         }

@@ -1,6 +1,7 @@
 ﻿using Api.Data;
 using System.Linq;
 using System.ComponentModel.DataAnnotations;
+using Api.Models.Promocoes;
 
 namespace Api.Models
 {
@@ -28,6 +29,28 @@ namespace Api.Models
         public static Promotion GetPromotionById(int id)
         {
             return _promotionContext.ListOfPromotions.FirstOrDefault(promotion => promotion.Id == id);
+        }
+
+        public static Microsoft.EntityFrameworkCore.DbSet<Promotion> GetListOfPromotions()
+        {
+            return _promotionContext.ListOfPromotions;
+        }
+
+        public static void AddNewPromotion(Promotion promotion)
+        {
+            _promotionContext.ListOfPromotions.Add(promotion);
+            _promotionContext.SaveChanges();
+        }
+
+        public static void SaveChanges()
+        {
+            _promotionContext.SaveChanges();
+        }
+
+        public static void RemovePromotion(Promotion promotion)
+        {
+            _promotionContext.ListOfPromotions.Remove(promotion);
+            _promotionContext.SaveChanges();
         }
     }
 }

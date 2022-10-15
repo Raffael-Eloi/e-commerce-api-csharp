@@ -43,5 +43,27 @@ namespace Api.Models
             }
             return totalValue;
         }
+
+        public static Microsoft.EntityFrameworkCore.DbSet<ShoppingCart> GetListOfShoppingCart()
+        {
+            return _shoppingCartContext.ListOfShoppingCarts;
+        }
+
+        public static void AddNewShoppingCart(ShoppingCart shoppingCart)
+        {
+            _shoppingCartContext.ListOfShoppingCarts.Add(shoppingCart);
+            _shoppingCartContext.SaveChanges();
+        }
+
+        public static void SaveChanges()
+        {
+            _shoppingCartContext.SaveChanges();
+        }
+
+        public static void RemoveShoppingCart(ShoppingCart shoppingCart)
+        {
+            _shoppingCartContext.ListOfShoppingCarts.Remove(shoppingCart);
+            _shoppingCartContext.SaveChanges();
+        }
     }
 }

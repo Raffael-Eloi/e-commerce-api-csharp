@@ -40,5 +40,27 @@ namespace Api.Models
             Item item = _itemContext.ListOfItems.FirstOrDefault(item => item.ProductId == productId);
             return item != null;
         }
+
+        public static Microsoft.EntityFrameworkCore.DbSet<Item> GetListOfItems()
+        {
+            return _itemContext.ListOfItems;
+        }
+
+        public static void AddNewItem(Item item)
+        {
+            _itemContext.ListOfItems.Add(item);
+            _itemContext.SaveChanges();
+        }
+
+        public static void SaveChanges()
+        {
+            _itemContext.SaveChanges();
+        }
+
+        public static void RemoveItem(Item item)
+        {
+            _itemContext.ListOfItems.Remove(item);
+            _itemContext.SaveChanges();
+        }
     }
 }
