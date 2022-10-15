@@ -16,10 +16,10 @@ namespace Api.Controllers
     public class ItemController : ControllerBase
     {
         private ItemContext _itemContext;
-        private ProdutoContext _produtoContext;
+        private ProductContext _produtoContext;
         private PromocaoContext _promocaoContext;
 
-        public ItemController(ItemContext context, ProdutoContext produtoContext, PromocaoContext promocaoContext)
+        public ItemController(ItemContext context, ProductContext produtoContext, PromocaoContext promocaoContext)
         {
             _itemContext = context;
             _produtoContext = produtoContext;
@@ -41,7 +41,7 @@ namespace Api.Controllers
             }
 
             Item item = Item.RecuperarItemPeloId(_itemContext, id);
-            Produto produto = Produto.RecuperarProdutoPeloId(_produtoContext, item.IdDoProduto);
+            Product produto = Product.RecuperarProdutoPeloId(_produtoContext, item.IdDoProduto);
             Console.WriteLine(Promocao.RecuperarPromocaoPeloId(_promocaoContext, item.IdDaPromocao).Nome);
             Promocao promocao = item.IdDaPromocao != 0 ? Promocao.RecuperarPromocaoPeloId(_promocaoContext, item.IdDaPromocao) : null;
 
@@ -65,7 +65,7 @@ namespace Api.Controllers
         [HttpPost]
         public IActionResult NovoItem([FromBody] CreateItemDto itemDto)
         {
-            if (Produto.ProdutoExiste(_produtoContext, itemDto.IdDoProduto))
+            if (Product.ProdutoExiste(_produtoContext, itemDto.IdDoProduto))
             {
                 return NotFound();
             }
@@ -75,7 +75,7 @@ namespace Api.Controllers
                 return NotFound();
             }
 
-            Produto produto = Produto.RecuperarProdutoPeloId(_produtoContext, itemDto.IdDoProduto); 
+            Product produto = Product.RecuperarProdutoPeloId(_produtoContext, itemDto.IdDoProduto); 
             Item itemVerificacao = _itemContext.Items.FirstOrDefault(itemVerificacao => itemVerificacao.IdDoProduto == itemDto.IdDoProduto);
             if (itemVerificacao != null)
             {
@@ -113,12 +113,12 @@ namespace Api.Controllers
         public IActionResult EditarItem(int id, [FromBody] UpdateItemDto itemDto)
         {
             Item itemAtual = Item.RecuperarItemPeloId(_itemContext, id);
-            if (!Produto.ProdutoExiste(_produtoContext, itemDto.IdDoProduto))
+            if (!Product.ProdutoExiste(_produtoContext, itemDto.IdDoProduto))
             {
                 return NotFound();
             }
 
-            Produto produto = Produto.RecuperarProdutoPeloId(_produtoContext, itemDto.IdDoProduto);
+            Product produto = Product.RecuperarProdutoPeloId(_produtoContext, itemDto.IdDoProduto);
             if (itemDto.IdDaPromocao != 0 && !Promocao.PromocaoExiste(_promocaoContext, itemDto.IdDaPromocao))
             {
                 return NotFound();

@@ -14,10 +14,10 @@ namespace Api.Controllers
 	{
 		private CarrinhoDeComprasContext _carrinhoContext;
         private ItemContext _itemContext;
-        private ProdutoContext _produtoContext;
+        private ProductContext _produtoContext;
 		private PromocaoContext _promocaoContext;
 
-        public CarrinhoController(CarrinhoDeComprasContext carrinhoContext, ItemContext itemContext, ProdutoContext produtoContext, PromocaoContext promocaoContext)
+        public CarrinhoController(CarrinhoDeComprasContext carrinhoContext, ItemContext itemContext, ProductContext produtoContext, PromocaoContext promocaoContext)
 		{
 			_carrinhoContext = carrinhoContext;
 			_itemContext = itemContext;
@@ -60,7 +60,7 @@ namespace Api.Controllers
             
 			CarrinhoDeCompras carrinho = CarrinhoDeCompras.RecuperarCarrinhoPeloId(_carrinhoContext, id);
 			Item item = Item.RecuperarItemPeloId(_itemContext, carrinho.IdDoItem);
-			Produto produto = Produto.RecuperarProdutoPeloId(_produtoContext, item.IdDoProduto);
+			Product produto = Product.RecuperarProdutoPeloId(_produtoContext, item.IdDoProduto);
             Promocao promocao = item.IdDaPromocao != 0 ? Promocao.RecuperarPromocaoPeloId(_promocaoContext, item.IdDaPromocao) : null;
 
             ReadCarrinhoDeComprasDto carrinhoVisualizacao = new ReadCarrinhoDeComprasDto()

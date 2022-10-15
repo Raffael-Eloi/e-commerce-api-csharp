@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Api.Migrations
 {
-    [DbContext(typeof(ProdutoContext))]
+    [DbContext(typeof(ProductContext))]
     [Migration("20221010031555_CriandoTabelaDeProdutos")]
     partial class CriandoTabelaDeProdutos
     {
