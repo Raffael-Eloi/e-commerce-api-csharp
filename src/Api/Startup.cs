@@ -23,7 +23,7 @@ namespace Api
 		{
             services.AddDbContext<ProdutoContext>(opts => opts.UseMySQL(Configuration.GetConnectionString("VirtualShopping")));
             services.AddDbContext<ItemContext>(opts => opts.UseMySQL(Configuration.GetConnectionString("VirtualShopping")));
-            services.AddDbContext<PromocaoContext>(opts => opts.UseMySQL(Configuration.GetConnectionString("VirtualShopping")));
+            services.AddDbContext<PromotionContext>(opts => opts.UseMySQL(Configuration.GetConnectionString("VirtualShopping")));
             services.AddDbContext<CarrinhoDeComprasContext>(opts => opts.UseMySQL(Configuration.GetConnectionString("VirtualShopping")));
 
             services.AddControllers();
